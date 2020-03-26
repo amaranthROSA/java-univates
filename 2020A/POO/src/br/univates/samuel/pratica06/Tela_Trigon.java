@@ -1,17 +1,20 @@
 package br.univates.samuel.pratica06;
 
 import br.univates.samuel.Entrada;
+import br.univates.samuel.pratica06.circulo.Circulo;
+import br.univates.samuel.pratica06.retangulo.Retangulo;
 import br.univates.samuel.pratica06.triangulo.Triangulo;
 
 /**
  *
- * @author Robert
+ * @author amaranth.rosa
  */
 public class Tela_Trigon {
 
 	Triangulo trig = new Triangulo();
-	// Retangulo retang = new Retangulo();
-	// Circunferencia circun = new Circunferencia();
+	Retangulo retang = new Retangulo();
+	Circulo circ = new Circulo();
+
 	double l1;
 	double l2;
 	double l3;
@@ -21,7 +24,7 @@ public class Tela_Trigon {
 	public void exibir() {
 		char op = ' ';
 		while (Character.toLowerCase(op) != 'x') {
-			op = Entrada.leiaChar("M E N U\n\n" + "[1] Triangulo\n" + "[2] Retangulo\n" + "[3] Circunfer√™ncia\n"
+			op = Entrada.leiaChar("M E N U\n\n" + "[1] Triangulo\n" + "[2] Retangulo\n" + "[3] CircunferÍncia\n"
 					+ "[x] Sair do sistema");
 
 			if (op == '1') {
@@ -31,8 +34,8 @@ public class Tela_Trigon {
 				trig.definirLados(l1, l2, l3);
 				trig.calcularPerimetro();
 				trig.calculaAreaTriangRet();
-				saida = Entrada.leiaString("Perimetro do Triangulo:" + trig.retornarPerimetro() + "\nTipo Triangulo: "
-						+ trig.tipoTriangulo() + "\nArea : " + trig.retornaAreaTriangRet() + "\n\nOK para continuar");
+				saida = Entrada.leiaString("Perimetro do Triangulo:" + trig.retornarPerimetro() + "\nTipo Tri‚ngulo: "
+						+ trig.tipoTriangulo() + "\n¡rea : " + trig.retornaAreaTriangRet() + "\n\nOK para continuar");
 			}
 
 			else if (op == '2') {
@@ -45,8 +48,12 @@ public class Tela_Trigon {
 
 			}
 
+			else if (op == 'x') {
+
+			}
+
 			else {
-				System.out.println("Op√ß√£o n√£o encontrada, digite uma das alternativas v√°lidas");
+				System.out.println("OpÁ„o n„o encontrada, informe uma das alternativas v·lidas");
 			}
 
 		}
