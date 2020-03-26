@@ -7,9 +7,6 @@ public class Triangulo {
 	double area;
 	double perimetro;
 	String tipo;
-	double b;
-	double h;
-	double A;
 
 	public Triangulo(double l1, double l2, double l3) {
 		lado1 = l1;
@@ -20,6 +17,12 @@ public class Triangulo {
 
 	public Triangulo() {
 
+	}
+
+	public void definirLados(double l1, double l2, double l3) {
+		this.lado1 = l1;
+		this.lado2 = l2;
+		this.lado3 = l3;
 	}
 
 	public boolean validarTriangulo() {
@@ -52,12 +55,13 @@ public class Triangulo {
 		return tipo;
 	}
 
-	public void calculaAreaTriangRet(double base, double altura) {
-		this.b = base;
-		this.h = altura;
+	public void calculaAreaTriangRet() {
+		area = (lado1 * lado3) / 2;
 
-		this.A = (b * h) / 2;
+	}
 
+	public double retornaAreaTriangRet() {
+		return area;
 	}
 
 }
