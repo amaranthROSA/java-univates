@@ -11,14 +11,6 @@ import br.univates.samuel.pratica06.triangulo.Triangulo;
  */
 public class Tela_Trigon {
 
-	Triangulo trig = new Triangulo();
-	Retangulo retang = new Retangulo();
-	Circulo circ = new Circulo();
-
-	double l1;
-	double l2;
-	double l3;
-	double raio;
 	String saida;
 
 	public void exibir() {
@@ -28,6 +20,12 @@ public class Tela_Trigon {
 					+ "[x] Sair do sistema");
 
 			if (op == '1') {
+				Triangulo trig = new Triangulo();
+
+				double l1;
+				double l2;
+				double l3;
+
 				l1 = Entrada.leiaDouble("informe Lado 1");
 				l2 = Entrada.leiaDouble("informe Lado 2");
 				l3 = Entrada.leiaDouble("informe Lado 3");
@@ -39,12 +37,33 @@ public class Tela_Trigon {
 			}
 
 			else if (op == '2') {
-				l1 = Entrada.leiaDouble("informe Lado 1");
-				l2 = Entrada.leiaDouble("informe Lado 2");
+				Retangulo retang = new Retangulo();
+				double l1 = Entrada.leiaDouble("informe Lado 1");
+				double l2 = Entrada.leiaDouble("informe Lado 2");
+				retang.defineLados(l1, l2);
+
+				saida = Entrada.leiaString("Perímetro do retângulo: " + retang.calculaPerimetro()
+						+ "\nÁrea do retângulo: " + retang.calculaArea());
 
 			}
 
 			else if (op == '3') {
+				Circulo circ = new Circulo();
+				double raio;
+				double diametro;
+				int opt = Entrada.leiaChar("1. Informe o raio \n2. Informe o diametro \nx. Cancelar");
+				if (opt == '1') {
+					raio = Entrada.leiaDouble("Informe o raio: ");
+					circ.setRaio(raio);
+					saida = Entrada.leiaString("Circunferência do círculo: " + circ.calculaCircunferenciaComRaio());
+				} else if (opt == '2') {
+					diametro = Entrada.leiaDouble("Informe o diâmetro: ");
+					circ.setDiametro(diametro);
+					saida = Entrada.leiaString("Circunferência do círculo: " + circ.calculaCircunferenciaComDiametro());
+
+				} else if (opt == 'x') {
+
+				}
 
 			}
 

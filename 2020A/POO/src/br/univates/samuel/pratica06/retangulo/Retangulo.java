@@ -17,6 +17,11 @@ public class Retangulo {
 
 	// getters e setters
 
+	public void defineLados(double base, double altura) {
+		this.base = base;
+		this.altura = altura;
+	}
+
 	public double getBase() {
 		return base;
 	}
@@ -35,12 +40,12 @@ public class Retangulo {
 
 	// metodos de calculo
 
-	public void calculaArea(double base, double altura) {
-		this.area = base * altura;
+	public double calculaArea() {
+		return area = base * altura;
 	}
 
-	public void calculaPerimetro(double base, double altura) {
-		this.perimetro = (base + altura) * 2;
+	public double calculaPerimetro() {
+		return perimetro = (base + altura) * 2;
 	}
 
 }

@@ -36,12 +36,12 @@ public class Circulo {
 		this.diametro = raio * 2;
 	}
 
-	public void calculaCircunferenciaComDiametro(double diametro) {
-		this.circunferencia = diametro * Math.PI;
+	public double calculaCircunferenciaComDiametro() {
+		return circunferencia = diametro * Math.PI;
 	}
 
-	public void calculaCircunferenciaComRaio(double raio) {
-		this.circunferencia = raio * Math.PI * 2;
+	public double calculaCircunferenciaComRaio() {
+		return circunferencia = raio * Math.PI * 2;
 	}
 
 }
