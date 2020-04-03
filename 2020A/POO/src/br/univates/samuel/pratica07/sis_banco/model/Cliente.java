@@ -1,14 +1,11 @@
-package br.univates.samuel.pratica07.sis_banco;
-
-import br.univates.samuel.pratica07.sis_banco.model.ClienteInterface;
+package br.univates.samuel.pratica07.sis_banco.model;
 
 /**
  * @author amaranth.rosa
  */
 
-public class Cliente implements ClienteInterface {
+public final class Cliente {
 
-	private static final long serialVersionUID = 1L;
 	private Long codigo;
 	private String nome;
 	private String sobrenome;
@@ -16,66 +13,61 @@ public class Cliente implements ClienteInterface {
 	private String endereco;
 	private String telefone;
 
-	@Override
+	public Cliente(Long codigo, String nome, String sobrenome, String cpf) {
+		this.codigo = codigo;
+		this.nome = nome;
+		this.sobrenome = sobrenome;
+		this.cpf = cpf;
+	}
+
 	public void setCodigoCliente(Long codigo) {
 		this.codigo = codigo;
 
 	}
 
-	@Override
 	public Long getCodigoCliente() {
 		return codigo;
 	}
 
-	@Override
 	public void setNomeCliente(String nome) {
 		this.nome = nome;
 
 	}
 
-	@Override
 	public String getNomeCliente() {
 		return nome;
 	}
 
-	@Override
 	public void setSobrenomeCliente(String sobrenome) {
 		this.sobrenome = sobrenome;
 
 	}
 
-	@Override
 	public String getSobrenomeCliente() {
 		return sobrenome;
 	}
 
-	@Override
 	public void setCpfCliente(String cpf) {
 		this.cpf = cpf;
 	}
 
-	@Override
 	public String getCpfCliente() {
 		return cpf;
 	}
 
-	@Override
 	public void setTelefoneCliente(String telefone) {
 		this.telefone = telefone;
 
 	}
 
-	@Override
 	public String getTelefoneCliente() {
 		return telefone;
 	}
 
-	@Override
 	public void setEnderecoCliente(String endereco) {
 		this.endereco = endereco;
 	}
 
-	@Override
 	public String getEnderecoCliente() {
 		return endereco;
 	}
