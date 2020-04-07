@@ -13,88 +13,130 @@ public class BancoTela {
 	List<Cliente> clientes = new ArrayList<Cliente>();
 	List<ContaCorrente> contas = new ArrayList<ContaCorrente>();
 
-	public void exibir() {
-		String op = JOptionPane.showInputDialog("MENU\n\n" + "[1] Cadastrar cliente\n" + "[2] Cadastrar conta\n"
-				+ "[3] Operar conta\n" + "[x] Sair do sistema");
-		char opcao = op.charAt(0);
+	// Armazena código do cliente para o sistema
+	String codigoCliente;
+	String menuOp;
 
-		/* Realiza cadastro do cliente */
-		if (op.equals("1")) {
-			String codigo = JOptionPane.showInputDialog("Informe o código: ");
-			String nome = JOptionPane.showInputDialog("Informe o nome: ");
-			String sobrenome = JOptionPane.showInputDialog("Informe o sobrenome: ");
-			String cpf = JOptionPane.showInputDialog("Informe o CPF: ");
-			String endereco = JOptionPane.showInputDialog("Informe o endereço: ");
-			String telefone = JOptionPane.showInputDialog("Informe o telefone: ");
+	/* Tela do menu */
+	public void menu() {
 
-			Cliente cliente = new Cliente.Builder(codigo, nome, sobrenome, cpf).endereco(endereco).telefone(telefone)
-					.build();
-
-			clientes.add(cliente);
-
-			exibir();
-		}
-
-		/* Realiza cadastro da conta */
-		else if (op.equals("2")) {
-			String codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
-
-			for (Cliente cliente : clientes) {
-				if (cliente.getCodigoCliente().equals(codigoCliente)) {
-
-					ContaCorrente conta = new ContaCorrente.Builder(cliente).build();
-					contas.add(conta);
-				} else {
-					JOptionPane.showMessageDialog(null, "Código de cliente não é válido.");
-				}
-
-			}
-
-			exibir();
-
-			/* Realiza operações na conta */
-		} else if (op.equals("3")) {
-			String codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
-
-			for (ContaCorrente conta : contas) {
-				if (conta.getCliente().getCodigoCliente().equals(Long.valueOf(codigoCliente))) {
-					String opt = JOptionPane
-							.showInputDialog("MENU\n\n" + "[1] Depositar\n" + "[2] Sacar\n" + "[x] Sair");
-
-					if (opt.equals("1")) {
-						String valor = JOptionPane.showInputDialog("Informe o valor a depositar");
-
-						conta.depositar(Double.parseDouble(valor));
-
-					} else if (opt.equals("2")) {
-
-						String valor = JOptionPane.showInputDialog("Informe o valor a sacar");
-
-						conta.sacar(Double.parseDouble(valor));
-
-					} else if (opt.equals("x")) {
-						JOptionPane.showMessageDialog(null, "Encerrando operações na conta.");
-					}
-
-					else {
-						JOptionPane.showMessageDialog(null, "Opção não encontrada.");
-					}
-
-				}
-			}
-
-			exibir();
-		}
-
-		else if (op.equals("x")) {
-			JOptionPane.showMessageDialog(null, "Encerrando sistema...");
-		}
-
-		else {
-			JOptionPane.showMessageDialog(null, "Opção não encontrada.");
-
-			exibir();
-		}
-
+		menuOp = JOptionPane.showInputDialog("MENU\n\n" + "[1] Cadastrar cliente\n" + "[2] Cadastrar conta\n"
+				+ "[3] Operar conta\n" + "[x] Sair do sistema\n\n");
 	}
+
+	public void exibir() {
+		menu();
+
+		if (menuOp.equals("x")) {
+			System.out.println("Sistema encerrado.");
+
+		} else {
+
+			this.codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
+
+			if (menuOp.equals("1")) {
+				cadastrarCliente();
+			}
+
+			else if (menuOp.equals("2")) {
+				cadastrarConta();
+
+			} else if (menuOp.equals("3")) {
+				operarConta();
+			}
+
+			else {
+				JOptionPane.showMessageDialog(null, "Opção não encontrada.");
+
+				// Retorna para tela principal
+				exibir();
+			}
+		}
+	}
+
+	/* Realiza cadastro do cliente */
+	public void cadastrarCliente() {
+		String codigo = this.codigoCliente;
+		String nome = JOptionPane.showInputDialog("Informe o nome: ");
+		String sobrenome = JOptionPane.showInputDialog("Informe o sobrenome: ");
+		String cpf = JOptionPane.showInputDialog("Informe o CPF: ");
+		String endereco = JOptionPane.showInputDialog("Informe o endereço: ");
+		String telefone = JOptionPane.showInputDialog("Informe o telefone: ");
+
+		Cliente cliente = new Cliente.Builder(codigo, nome, sobrenome, cpf).endereco(endereco).telefone(telefone)
+				.build();
+
+		clientes.add(cliente);
+
+		// Retorna para tela principal
+		exibir();
+	}
+
+	/* Realiza cadastro da conta */
+	public void cadastrarConta() {
+		for (Cliente cliente : clientes) {
+			if (cliente.getCodigoCliente().equals(codigoCliente)) {
+
+				ContaCorrente conta = new ContaCorrente.Builder(cliente).build();
+				contas.add(conta);
+			} else {
+				JOptionPane.showMessageDialog(null, "Código de cliente não é válido.");
+			}
+		}
+
+		// Retorna para tela principal
+		exibir();
+	}
+
+	/* Realiza operações na conta */
+	public void operarConta() {
+
+		for (ContaCorrente conta : contas) {
+
+			/* Avisa caso não encontrar cliente */
+			if (!(conta.getCliente().getCodigoCliente().equals(codigoCliente))) {
+
+				JOptionPane.showMessageDialog(null, "Cliente não encontrado!");
+
+			} else {
+				String opt = JOptionPane
+						.showInputDialog("MENU\n\n" + "[1] Depositar\n" + "[2] Sacar\n" + "[3] Saldo\n" + "[x] Sair");
+
+				if (opt.equals("1")) {
+					String valor = JOptionPane.showInputDialog("Informe o valor a depositar");
+
+					conta.depositar(Double.parseDouble(valor));
+
+					JOptionPane.showMessageDialog(null, "Depositado valor de R$ " + valor + " para "
+							+ conta.getCliente().getNomeCliente() + "\n" + "Saldo atual: " + conta.getSaldo());
+
+				} else if (opt.equals("2")) {
+
+					String valor = JOptionPane.showInputDialog("Informe o valor a sacar");
+
+					conta.sacar(Double.parseDouble(valor));
+
+					JOptionPane.showMessageDialog(null, "Sacado valor de R$ " + valor + " para "
+							+ conta.getCliente().getNomeCliente() + "\n" + "Saldo atual: " + conta.getSaldo());
+
+				} else if (opt.contentEquals("3")) {
+					JOptionPane.showMessageDialog(null, "Saldo para cliente " + conta.getCliente().getNomeCliente()
+							+ " é de:\n" + "R$ " + conta.getSaldo());
+				}
+
+				else if (opt.equals("x")) {
+					JOptionPane.showMessageDialog(null, "Encerrando operações na conta.");
+				}
+
+				else {
+					JOptionPane.showMessageDialog(null, "Opção não encontrada.");
+				}
+			}
+
+		}
+
+		// Retorna para tela principal
+		exibir();
+	}
+
 }
