@@ -7,25 +7,25 @@ import br.univates.samuel.pratica07.sis_banco.data.Data;
  */
 
 public class ContaCorrente {
-	private Cliente cliente;
-	private long codigoConta;
+
 	private double saldo;
 	private double limite;
 	private boolean isContaBloqueada;
 	private Data utlimaMovimentacao;
 
+	private Cliente cliente;
+
 	/* BUILDER */
 	public static class Builder {
 
-		private final Cliente cliente; // requerido
-		private final long codigoConta; // requerido
 		private double saldo; // opcional
 		private double limite; // opcional
 		private boolean isContaBloqueada; // opcional
 
-		public Builder(Cliente cliente, long codigo) {
+		private final Cliente cliente; // requerido
+
+		public Builder(Cliente cliente) {
 			this.cliente = cliente;
-			this.codigoConta = codigo;
 		}
 
 		public Builder saldo(double saldo) {
@@ -52,7 +52,6 @@ public class ContaCorrente {
 	// Construtor que "consome" Builder
 	private ContaCorrente(Builder builder) {
 		this.cliente = builder.cliente;
-		this.codigoConta = builder.codigoConta;
 		this.saldo = builder.saldo;
 		this.limite = builder.limite;
 
@@ -61,7 +60,6 @@ public class ContaCorrente {
 	/* Só pode ser informado uma vez, via construtor */
 	public ContaCorrente(final Cliente cliente, final Long codigo, Double limite) {
 		this.cliente = cliente;
-		this.codigoConta = codigo;
 		this.limite = limite;
 	}
 
@@ -69,10 +67,6 @@ public class ContaCorrente {
 	/* Definições de identificação */
 	public Cliente getCliente() {
 		return cliente;
-	}
-
-	public Long getCodigoConta() {
-		return codigoConta;
 	}
 
 	/* ----------------------------------------- */

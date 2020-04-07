@@ -6,27 +6,68 @@ package br.univates.samuel.pratica07.sis_banco.model;
 
 public final class Cliente {
 
-	private Long codigo;
+	private String codigoCliente;
 	private String nome;
 	private String sobrenome;
 	private String cpf;
 	private String endereco;
 	private String telefone;
 
-	public Cliente(Long codigo, String nome, String sobrenome, String cpf) {
-		this.codigo = codigo;
+	public static class Builder {
+		private String codigoCliente;
+		private String nome;
+		private String sobrenome;
+		private String cpf;
+		private String endereco;
+		private String telefone;
+
+		public Builder(String codigoCliente, String nome, String sobrenome, String cpf) {
+			this.codigoCliente = codigoCliente;
+			this.nome = nome;
+			this.sobrenome = sobrenome;
+			this.cpf = cpf;
+		}
+
+		public Builder endereco(String endereco) {
+			this.endereco = endereco;
+			return this;
+		}
+
+		public Builder telefone(String telefone) {
+			this.telefone = telefone;
+			return this;
+		}
+
+		public Cliente build() {
+			return new Cliente(this);
+		}
+
+	}
+
+	// Construtor que "consome" Builder
+	private Cliente(Builder builder) {
+		this.codigoCliente = builder.codigoCliente;
+		this.nome = builder.nome;
+		this.sobrenome = builder.sobrenome;
+		this.cpf = builder.cpf;
+		this.endereco = builder.endereco;
+		this.telefone = builder.telefone;
+	}
+
+	public Cliente(String codigoCliente, String nome, String sobrenome, String cpf) {
+		this.codigoCliente = codigoCliente;
 		this.nome = nome;
 		this.sobrenome = sobrenome;
 		this.cpf = cpf;
 	}
 
-	public void setCodigoCliente(Long codigo) {
-		this.codigo = codigo;
+	public void setCodigoCliente(String codigoCliente) {
+		this.codigoCliente = codigoCliente;
 
 	}
 
-	public Long getCodigoCliente() {
-		return codigo;
+	public String getCodigoCliente() {
+		return codigoCliente;
 	}
 
 	public void setNomeCliente(String nome) {
