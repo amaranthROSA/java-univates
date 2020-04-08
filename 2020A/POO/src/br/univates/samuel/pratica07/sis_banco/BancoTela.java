@@ -32,16 +32,16 @@ public class BancoTela {
 
 		} else {
 
-			this.codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
-
 			if (menuOp.equals("1")) {
 				cadastrarCliente();
 			}
 
 			else if (menuOp.equals("2")) {
+				this.codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
 				cadastrarConta();
 
 			} else if (menuOp.equals("3")) {
+				this.codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
 				operarConta();
 			}
 
@@ -56,14 +56,14 @@ public class BancoTela {
 
 	/* Realiza cadastro do cliente */
 	public void cadastrarCliente() {
-		String codigo = this.codigoCliente;
+		String codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
 		String nome = JOptionPane.showInputDialog("Informe o nome: ");
 		String sobrenome = JOptionPane.showInputDialog("Informe o sobrenome: ");
 		String cpf = JOptionPane.showInputDialog("Informe o CPF: ");
 		String endereco = JOptionPane.showInputDialog("Informe o endereço: ");
 		String telefone = JOptionPane.showInputDialog("Informe o telefone: ");
 
-		Cliente cliente = new Cliente.Builder(codigo, nome, sobrenome, cpf).endereco(endereco).telefone(telefone)
+		Cliente cliente = new Cliente.Builder(codigoCliente, nome, sobrenome, cpf).endereco(endereco).telefone(telefone)
 				.build();
 
 		clientes.add(cliente);
@@ -91,16 +91,12 @@ public class BancoTela {
 	/* Realiza operações na conta */
 	public void operarConta() {
 
+		String opt = JOptionPane
+				.showInputDialog("MENU\n\n" + "[1] Depositar\n" + "[2] Sacar\n" + "[3] Saldo\n" + "[x] Sair");
+
 		for (ContaCorrente conta : contas) {
 
-			/* Avisa caso não encontrar cliente */
-			if (!(conta.getCliente().getCodigoCliente().equals(codigoCliente))) {
-
-				JOptionPane.showMessageDialog(null, "Cliente não encontrado!");
-
-			} else {
-				String opt = JOptionPane
-						.showInputDialog("MENU\n\n" + "[1] Depositar\n" + "[2] Sacar\n" + "[3] Saldo\n" + "[x] Sair");
+			if (conta.getCliente().getCodigoCliente().contentEquals(codigoCliente)) {
 
 				if (opt.equals("1")) {
 					String valor = JOptionPane.showInputDialog("Informe o valor a depositar");
@@ -131,6 +127,8 @@ public class BancoTela {
 				else {
 					JOptionPane.showMessageDialog(null, "Opção não encontrada.");
 				}
+
+				break;
 			}
 
 		}
