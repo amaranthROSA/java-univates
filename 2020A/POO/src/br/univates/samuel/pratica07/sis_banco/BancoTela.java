@@ -6,55 +6,51 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import br.univates.samuel.pratica07.sis_banco.model.Cliente;
-import br.univates.samuel.pratica07.sis_banco.model.ContaCorrente;
+import br.univates.samuel.pratica07.sis_banco.model.Conta;
 
 public class BancoTela {
 
-	List<Cliente> clientes = new ArrayList<Cliente>();
-	List<ContaCorrente> contas = new ArrayList<ContaCorrente>();
+	static List<Cliente> clientes = new ArrayList<Cliente>();
+	static List<Conta> contas = new ArrayList<Conta>();
 
 	// Armazena código do cliente para o sistema
 	String codigoCliente;
 	String menuOp;
+	String op;
 
-	/* Tela do menu */
-	public void menu() {
+	private Conta conta;
+
+	public static void main(String[] args) {
+		BancoTela tela = new BancoTela();
+		tela.exibir();
+	}
+
+	/* Mosta "tela do principal" */
+	public void exibir() {
 
 		menuOp = JOptionPane.showInputDialog("MENU\n\n" + "[1] Cadastrar cliente\n" + "[2] Cadastrar conta\n"
 				+ "[3] Operar conta\n" + "[x] Sair do sistema\n\n");
-	}
 
-	public void exibir() {
-		menu();
-
-		if (menuOp.equals("x")) {
+		switch (menuOp) {
+		case "1":
+			cadastrarCliente();
+			break;
+		case "2":
+			cadastrarConta();
+			break;
+		case "3":
+			operarConta();
+			break;
+		case "x":
 			System.out.println("Sistema encerrado.");
-
-		} else {
-
-			if (menuOp.equals("1")) {
-				cadastrarCliente();
-			}
-
-			else if (menuOp.equals("2")) {
-				this.codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
-				cadastrarConta();
-
-			} else if (menuOp.equals("3")) {
-				this.codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
-				operarConta();
-			}
-
-			else {
-				JOptionPane.showMessageDialog(null, "Opção não encontrada.");
-
-				// Retorna para tela principal
-				exibir();
-			}
+			break;
+		default:
+			JOptionPane.showMessageDialog(null, "Opção não encontrada.");
+			exibir();
+			break;
 		}
 	}
 
-	/* Realiza cadastro do cliente */
 	public void cadastrarCliente() {
 		String codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
 		String nome = JOptionPane.showInputDialog("Informe o nome: ");
@@ -65,76 +61,93 @@ public class BancoTela {
 
 		Cliente cliente = new Cliente.Builder(codigoCliente, nome, sobrenome, cpf).endereco(endereco).telefone(telefone)
 				.build();
-
 		clientes.add(cliente);
 
-		// Retorna para tela principal
+		/* Mostra informações do cliente */
+		String info = getInfoCliente(cliente);
+		JOptionPane.showMessageDialog(null, "Cliente cadastrado com sucesso!\n" + info);
+
 		exibir();
 	}
 
-	/* Realiza cadastro da conta */
 	public void cadastrarConta() {
+		String codigoCliente = JOptionPane.showInputDialog(null, "Informe o código do cliente: ");
+
+		Cliente cliente = encontrarCliente(codigoCliente);
+
+		if (cliente != null) {
+			Conta conta = new Conta.Builder(cliente).build();
+			contas.add(conta);
+
+			/* Mostra informações da conta */
+			String info = getInfoContaCliente(conta);
+			JOptionPane.showMessageDialog(null, "Conta cadastrada com sucesso!\n" + info);
+
+		} else {
+			JOptionPane.showMessageDialog(null, "Cliente não existe ou código inválido!");
+		}
+
+		exibir();
+	}
+
+	public void operarConta() {
+		String codigoCliente = JOptionPane.showInputDialog("Informe o código do cliente: ");
+
+		Conta conta = encontrarConta(codigoCliente);
+
+		if (conta != null) {
+			OperaConta operar = new OperaConta(conta);
+			operar.exibir();
+
+		} else {
+			JOptionPane.showMessageDialog(null, "Não existe conta cadastrada para o código informado!");
+		}
+
+		exibir();
+	}
+
+	public String getInfoCliente(Cliente cliente) {
+		StringBuilder stb = new StringBuilder();
+		stb.append("Nome: " + cliente.getNomeCliente());
+		stb.append("\nSobrenome: " + cliente.getSobrenomeCliente());
+		stb.append("\nCPF: " + cliente.getCpfCliente());
+		stb.append("\nEndereço: " + cliente.getEnderecoCliente());
+		stb.append("\nTelefone: " + cliente.getTelefoneCliente());
+
+		return stb.toString();
+	}
+
+	public String getInfoContaCliente(Conta conta) {
+		StringBuilder stb = new StringBuilder();
+		stb.append("Nome competo: " + conta.getCliente().getNomeCliente() + " "
+				+ conta.getCliente().getSobrenomeCliente());
+		stb.append("\nCódigo do cliente: " + conta.getCliente().getCodigoCliente());
+
+		return stb.toString();
+	}
+
+	/* Retorna Cliente pelo código do cliente */
+	public Cliente encontrarCliente(String codigoCliente) {
+
 		for (Cliente cliente : clientes) {
 			if (cliente.getCodigoCliente().equals(codigoCliente)) {
-
-				ContaCorrente conta = new ContaCorrente.Builder(cliente).build();
-				contas.add(conta);
-			} else {
-				JOptionPane.showMessageDialog(null, "Código de cliente não é válido.");
+				return cliente;
 			}
 		}
 
-		// Retorna para tela principal
-		exibir();
+		return null;
 	}
 
-	/* Realiza operações na conta */
-	public void operarConta() {
+	/* Retorna Conta pelo código do cliente */
+	public Conta encontrarConta(String codigoCliente) {
 
-		String opt = JOptionPane
-				.showInputDialog("MENU\n\n" + "[1] Depositar\n" + "[2] Sacar\n" + "[3] Saldo\n" + "[x] Sair");
-
-		for (ContaCorrente conta : contas) {
-
-			if (conta.getCliente().getCodigoCliente().contentEquals(codigoCliente)) {
-
-				if (opt.equals("1")) {
-					String valor = JOptionPane.showInputDialog("Informe o valor a depositar");
-
-					conta.depositar(Double.parseDouble(valor));
-
-					JOptionPane.showMessageDialog(null, "Depositado valor de R$ " + valor + " para "
-							+ conta.getCliente().getNomeCliente() + "\n" + "Saldo atual: " + conta.getSaldo());
-
-				} else if (opt.equals("2")) {
-
-					String valor = JOptionPane.showInputDialog("Informe o valor a sacar");
-
-					conta.sacar(Double.parseDouble(valor));
-
-					JOptionPane.showMessageDialog(null, "Sacado valor de R$ " + valor + " para "
-							+ conta.getCliente().getNomeCliente() + "\n" + "Saldo atual: " + conta.getSaldo());
-
-				} else if (opt.contentEquals("3")) {
-					JOptionPane.showMessageDialog(null, "Saldo para cliente " + conta.getCliente().getNomeCliente()
-							+ " é de:\n" + "R$ " + conta.getSaldo());
-				}
-
-				else if (opt.equals("x")) {
-					JOptionPane.showMessageDialog(null, "Encerrando operações na conta.");
-				}
-
-				else {
-					JOptionPane.showMessageDialog(null, "Opção não encontrada.");
-				}
-
-				break;
+		for (Conta conta : contas) {
+			if (conta.getCliente().getCodigoCliente().equals(codigoCliente)) {
+				return conta;
 			}
-
 		}
 
-		// Retorna para tela principal
-		exibir();
+		return null;
 	}
 
 }

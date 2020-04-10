@@ -1,17 +1,19 @@
 package br.univates.samuel.pratica07.sis_banco.model;
 
+import java.util.LinkedList;
+
 import br.univates.samuel.pratica07.sis_banco.data.Data;
 
 /**
  * @author amaranth.rosa
  */
 
-public class ContaCorrente {
+public class Conta {
 
 	private double saldo;
 	private double limite;
 	private boolean isContaBloqueada;
-	private Data utlimaMovimentacao;
+	private LinkedList<Movimento> movimentos;
 
 	private Cliente cliente;
 
@@ -20,7 +22,7 @@ public class ContaCorrente {
 
 		private double saldo; // opcional
 		private double limite; // opcional
-		private boolean isContaBloqueada; // opcional
+		private boolean isBloqueada; // opcional
 
 		private final Cliente cliente; // requerido
 
@@ -39,18 +41,18 @@ public class ContaCorrente {
 		}
 
 		public Builder contaBloqueada(boolean isBloqueada) {
-			this.isContaBloqueada = isBloqueada;
+			this.isBloqueada = isBloqueada;
 			return this;
 		}
 
-		public ContaCorrente build() {
-			return new ContaCorrente(this);
+		public Conta build() {
+			return new Conta(this);
 		}
 
 	}
 
 	// Construtor que "consome" Builder
-	private ContaCorrente(Builder builder) {
+	private Conta(Builder builder) {
 		this.cliente = builder.cliente;
 		this.saldo = builder.saldo;
 		this.limite = builder.limite;
@@ -58,7 +60,7 @@ public class ContaCorrente {
 	}
 
 	/* Só pode ser informado uma vez, via construtor */
-	public ContaCorrente(final Cliente cliente, final Long codigo, Double limite) {
+	public Conta(final Cliente cliente, final Long codigo, Double limite) {
 		this.cliente = cliente;
 		this.limite = limite;
 	}
@@ -82,7 +84,7 @@ public class ContaCorrente {
 	/* ----------------------------------------- */
 	// Operação de saque e deposito
 
-	public void depositar(double valor) {
+	public void depositar(Conta conta, double valor) {
 		if (!(valor > 0) && !isContaBloqueada()) {
 			System.out.println("Operação abortada!\nNão pode depositar valor negativo ou nulo!");
 		} else {
@@ -91,7 +93,8 @@ public class ContaCorrente {
 			Data data = new Data();
 			data.setDataComoHoje();
 
-			utlimaMovimentacao = data;
+			Movimento movimento = new Movimento(conta, data);
+			movimentos.add(movimento);
 
 			StringBuilder build = new StringBuilder();
 			build.append("Efetuando deposito de R$ " + valor);
@@ -103,7 +106,7 @@ public class ContaCorrente {
 
 	}
 
-	public void sacar(double valor) {
+	public void sacar(Conta conta, double valor) {
 		if (valor > (this.getSaldo() + getLimite())) {
 			System.out.println("Operação abortada!\nNão pode sacar mais que o saldo disponível.");
 		} else {
@@ -121,12 +124,14 @@ public class ContaCorrente {
 		return this.saldo;
 	}
 
-	public Data getUtlimaMovimentacao() {
-		return utlimaMovimentacao;
+	public Movimento getUtlimaMovimentacao() {
+
+		return movimentos.getLast();
+
 	}
 
-	public void setUtlimaMovimentacao(Data utlimaMovimentacao) {
-		this.utlimaMovimentacao = utlimaMovimentacao;
+	public void setUtlimaMovimentacao(Movimento movimento) {
+		this.movimentos.add(movimento);
 	}
 
 	/* ----------------------------------------- */
@@ -147,11 +152,11 @@ public class ContaCorrente {
 	/* ----------------------------------------- */
 	/* Tranferencia de valores para outras contas */
 
-	public void transfereValor(ContaCorrente origem, ContaCorrente destino, double valor) {
+	public void transfereValor(Conta origem, Conta destino, double valor) {
 
 	}
 
-	public void pagarBeleto(ContaCorrente conta, double valor) {
+	public void pagarBeleto(Conta conta, double valor) {
 
 	}
 
