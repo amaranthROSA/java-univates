@@ -2,6 +2,8 @@ package br.univates.samuel.pratica07.sis_banco.model;
 
 import java.util.LinkedList;
 
+import javax.swing.JOptionPane;
+
 import br.univates.samuel.pratica07.sis_banco.data.Data;
 
 /**
@@ -13,7 +15,7 @@ public class Conta {
 	private double saldo;
 	private double limite;
 	private boolean isContaBloqueada;
-	private LinkedList<Movimento> movimentos;
+	private LinkedList<Movimento> movimentos = new LinkedList<Movimento>();
 
 	private Cliente cliente;
 
@@ -90,18 +92,18 @@ public class Conta {
 		} else {
 			this.saldo = (saldo + valor);
 
-			Data data = new Data();
-			data.setDataComoHoje();
+//			Data data = new Data();
+//			data.setDataComoHoje();
 
-			Movimento movimento = new Movimento(conta, data);
-			movimentos.add(movimento);
+//			Movimento movimento = new Movimento(conta, data);
+//			movimentos.add(movimento);
 
 			StringBuilder build = new StringBuilder();
 			build.append("Efetuando deposito de R$ " + valor);
 			build.append(" para " + cliente.getNomeCliente());
 			build.append(" " + cliente.getSobrenomeCliente());
 
-			System.out.println(build);
+			JOptionPane.showMessageDialog(null, build);
 		}
 
 	}
@@ -116,8 +118,12 @@ public class Conta {
 			build.append("Efetuando saque de R$ " + valor);
 			build.append(" para " + cliente.getNomeCliente());
 			build.append(" " + cliente.getSobrenomeCliente());
-			System.out.println(build);
+			JOptionPane.showMessageDialog(null, build);
 		}
+
+		/* Adiciona movimentação */
+		Movimento mv = new Movimento(conta, new Data());
+		movimentos.add(mv);
 	}
 
 	public Double getSaldo() {
@@ -149,15 +155,9 @@ public class Conta {
 		return saldo <= 0 ? true : false;
 	}
 
-	/* ----------------------------------------- */
-	/* Tranferencia de valores para outras contas */
-
-	public void transfereValor(Conta origem, Conta destino, double valor) {
-
-	}
-
-	public void pagarBeleto(Conta conta, double valor) {
-
+	/* Cadastra um movimento */
+	public void addMovimento(Movimento movimento) {
+		movimentos.add(movimento);
 	}
 
 }

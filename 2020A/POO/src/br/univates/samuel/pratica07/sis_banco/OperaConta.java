@@ -5,7 +5,9 @@ package br.univates.samuel.pratica07.sis_banco;
 
 import javax.swing.JOptionPane;
 
+import br.univates.samuel.pratica07.sis_banco.data.Data;
 import br.univates.samuel.pratica07.sis_banco.model.Conta;
+import br.univates.samuel.pratica07.sis_banco.model.Movimento;
 
 /**
  * @author amaranth.rosa
@@ -27,8 +29,9 @@ public class OperaConta {
 	}
 
 	public void exibir() {
-		String menuOp = JOptionPane.showInputDialog("MENU\n\n" + "[1] Depositar\n" + "[2] Sacar\n"
-				+ "[3] Consultar Saldo\n" + "[4] Tranferir\n" + "[x] Sair\n\n");
+		String menuOp = JOptionPane
+				.showInputDialog("MENU\n\n" + "[1] Depositar\n" + "[2] Sacar\n" + "[3] Consultar Saldo/Limite\n"
+						+ "[4] Tranferir\n" + "[5] Definir limite\n" + "[6] Pagar boleto\n" + "[x] Sair\n\n");
 
 		String valor;
 		switch (menuOp) {
@@ -44,7 +47,20 @@ public class OperaConta {
 			JOptionPane.showMessageDialog(null, consultar(conta));
 			break;
 		case "4":
-			/* Implementar funções de tranferência */
+			valor = JOptionPane.showInputDialog("Informe o valor a ser transferido: ");
+			String codCliDest = JOptionPane.showInputDialog("Código de cliente da conta de destino: ");
+
+			Conta contaDest = encontrarConta(codCliDest);
+
+			transferir(contaDest, Double.parseDouble(valor));
+			break;
+		case "5":
+			String limite = JOptionPane.showInputDialog("Informe o limite da conta (em R$)");
+			definirLimite(conta, Double.parseDouble(limite));
+			break;
+		case "6":
+			valor = JOptionPane.showInputDialog("Informe o valor do boleto: ");
+			pagarBoleto(Double.parseDouble(valor));
 			break;
 		case "x":
 			JOptionPane.showMessageDialog(null, "Encerrando operações na conta.");
@@ -56,31 +72,42 @@ public class OperaConta {
 	}
 
 	/* Busca conta pelo código e setta ela na variável */
-	public void encontrarConta(String codigoCliente) {
+	public Conta encontrarConta(String codigoCliente) {
 
 		for (Conta conta : BancoTela.contas) {
 
 			if (conta.getCliente().getCodigoCliente().equals(codigoCliente)) {
 
+				return conta;
 			}
 		}
+		return null;
 	}
 
 	public void depositar(Conta conta, double valor) {
 
 		conta.depositar(conta, valor);
 
-		JOptionPane.showMessageDialog(null, "Depositado valor de R$ " + valor + " para "
-				+ conta.getCliente().getNomeCliente() + "\n" + "Saldo atual: " + conta.getSaldo());
+		/* Adiciona movimentação */
+		Movimento mv = new Movimento(conta, new Data());
+		conta.addMovimento(mv);
+
+		exibir();
 	}
 
 	public void sacar(Conta conta, double valor) {
 
 		conta.sacar(conta, valor);
 
-		JOptionPane.showMessageDialog(null, "Sacado valor de R$ " + valor + " para "
-				+ conta.getCliente().getNomeCliente() + "\n" + "Saldo atual: " + conta.getSaldo());
+		/* Adiciona movimentação */
+		Movimento mv = new Movimento(conta, new Data());
+		conta.addMovimento(mv);
 
+	}
+
+	public void definirLimite(Conta conta, double limite) {
+		conta.setLimite(limite);
+		JOptionPane.showMessageDialog(null, "O limite da conta agora é: " + conta.getLimite());
 	}
 
 	public String consultar(Conta conta) {
@@ -92,8 +119,19 @@ public class OperaConta {
 
 	}
 
-	public void transferir(Conta contaOrigem, Conta contaDestino, double valor) {
+	/* Retira o valor da conta atual e transfere para a conta de "destino" */
+	public void transferir(Conta contaDestino, double valor) {
+		conta.sacar(conta, valor);
+		contaDestino.depositar(contaDestino, valor);
 
+		/* Adiciona movimentação */
+		Movimento mv = new Movimento(conta, new Data());
+		conta.addMovimento(mv);
+	}
+
+	public void pagarBoleto(double valor) {
+		conta.sacar(conta, valor);
+		JOptionPane.showMessageDialog(null, "Boleto no valor de R$ " + valor + " foi pago.");
 	}
 
 }
