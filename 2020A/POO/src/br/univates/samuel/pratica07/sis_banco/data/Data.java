@@ -51,6 +51,10 @@ public class Data {
 		return ano;
 	}
 
+	public String obterDiaMesAno() {
+		return new String(obterDia() + "/" + obterMes() + "/" + obterAno());
+	}
+
 	public String obterExtensoMes() {
 		String[] extMes = { "janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro",
 				"outubro", "novembro", "dezembro" };

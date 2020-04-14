@@ -29,9 +29,9 @@ public class OperaConta {
 	}
 
 	public void exibir() {
-		String menuOp = JOptionPane
-				.showInputDialog("MENU\n\n" + "[1] Depositar\n" + "[2] Sacar\n" + "[3] Consultar Saldo/Limite\n"
-						+ "[4] Tranferir\n" + "[5] Definir limite\n" + "[6] Pagar boleto\n" + "[x] Sair\n\n");
+		String menuOp = JOptionPane.showInputDialog("MENU\n\n" + "[1] Depositar\n" + "[2] Sacar\n"
+				+ "[3] Consultar Saldo/Limite\n" + "[4] Tranferir\n" + "[5] Definir limite\n" + "[6] Pagar boleto\n"
+				+ "[7] Pagar cheque\n" + "[8] Extrato\n" + "[9] Desbloquear conta\n" + "[x] Sair\n\n");
 
 		String valor;
 		switch (menuOp) {
@@ -61,6 +61,16 @@ public class OperaConta {
 		case "6":
 			valor = JOptionPane.showInputDialog("Informe o valor do boleto: ");
 			pagarBoleto(Double.parseDouble(valor));
+			break;
+		case "7":
+			valor = JOptionPane.showInputDialog("Informe o valor do cheque: ");
+			pagarCheque(Double.parseDouble(valor));
+			break;
+		case "8":
+			System.out.println(getExtratoConta());
+			break;
+		case "9":
+			desbloquearConta();
 			break;
 		case "x":
 			JOptionPane.showMessageDialog(null, "Encerrando operações na conta.");
@@ -96,13 +106,13 @@ public class OperaConta {
 	}
 
 	public void sacar(Conta conta, double valor) {
-
 		conta.sacar(conta, valor);
 
 		/* Adiciona movimentação */
 		Movimento mv = new Movimento(conta, new Data());
 		conta.addMovimento(mv);
 
+		exibir();
 	}
 
 	public void definirLimite(Conta conta, double limite) {
@@ -127,11 +137,46 @@ public class OperaConta {
 		/* Adiciona movimentação */
 		Movimento mv = new Movimento(conta, new Data());
 		conta.addMovimento(mv);
+
+		exibir();
 	}
 
 	public void pagarBoleto(double valor) {
 		conta.sacar(conta, valor);
 		JOptionPane.showMessageDialog(null, "Boleto no valor de R$ " + valor + " foi pago.");
+
+		exibir();
+	}
+
+	public void pagarCheque(double valor) {
+		if (conta.getSaldo() < valor) {
+			conta.setContaBloqueada(true);
+			JOptionPane.showMessageDialog(null, "Cheque sem fundo detectado!\nA conta foi bloqueada.");
+		} else {
+			conta.sacar(conta, valor);
+			JOptionPane.showMessageDialog(null, "Cheque no valor de R$ " + valor + " pago.");
+		}
+
+		exibir();
+	}
+
+	public String getExtratoConta() {
+		StringBuilder stb = new StringBuilder();
+		stb.append("----------------------EXTRATO BANCÁRIO----------------------");
+		stb.append("\nProprietário: " + conta.getCliente().getNomeCliente() + " "
+				+ conta.getCliente().getSobrenomeCliente());
+		stb.append("\nSaldo: R$ " + conta.getSaldo());
+		stb.append("\nÚltima movimentação: " + conta.getUtlimaMovimentacao().getDataMovimentacao().obterDiaMesAno()
+				+ "\n");
+
+		return stb.toString();
+	}
+
+	public void desbloquearConta() {
+		conta.setContaBloqueada(false);
+		JOptionPane.showMessageDialog(null, "A conta foi desbloqueada!");
+
+		exibir();
 	}
 
 }

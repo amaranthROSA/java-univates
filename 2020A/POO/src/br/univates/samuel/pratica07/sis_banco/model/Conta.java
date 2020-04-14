@@ -87,8 +87,12 @@ public class Conta {
 	// Operação de saque e deposito
 
 	public void depositar(Conta conta, double valor) {
-		if (!(valor > 0) && !isContaBloqueada()) {
+		if (conta.isContaBloqueada) {
+			JOptionPane.showMessageDialog(null, "A conta está bloqueada!");
+
+		} else if (!(valor > 0)) {
 			System.out.println("Operação abortada!\nNão pode depositar valor negativo ou nulo!");
+
 		} else {
 			this.saldo = (saldo + valor);
 
@@ -98,19 +102,23 @@ public class Conta {
 //			Movimento movimento = new Movimento(conta, data);
 //			movimentos.add(movimento);
 
-			StringBuilder build = new StringBuilder();
-			build.append("Efetuando deposito de R$ " + valor);
-			build.append(" para " + cliente.getNomeCliente());
-			build.append(" " + cliente.getSobrenomeCliente());
+			StringBuilder stb = new StringBuilder();
+			stb.append("Efetuando deposito de R$ " + valor);
+			stb.append(" para " + cliente.getNomeCliente());
+			stb.append(" " + cliente.getSobrenomeCliente());
 
-			JOptionPane.showMessageDialog(null, build);
+			JOptionPane.showMessageDialog(null, stb);
 		}
 
 	}
 
 	public void sacar(Conta conta, double valor) {
-		if (valor > (this.getSaldo() + getLimite())) {
+		if (conta.isContaBloqueada) {
+			JOptionPane.showMessageDialog(null, "A conta está bloqueada!");
+
+		} else if (valor > (this.getSaldo() + getLimite())) {
 			System.out.println("Operação abortada!\nNão pode sacar mais que o saldo disponível.");
+
 		} else {
 			this.saldo = (saldo - valor);
 
