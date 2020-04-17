@@ -21,15 +21,6 @@ public class Reservatorio {
 
 	private static boolean isBloqueado = false;
 
-	/*-------- CONSTANTES --------*/
-	public int getRESERV_MAX() {
-		return RESERV_MAX;
-	}
-
-	public int getRESERV_MIN() {
-		return RESERV_MIN;
-	}
-
 	/*-------- REPOSIÇÃO DE INGREDIENTES --------*/
 	public void reporCafe(int cafe) {
 		if (cafe + getQtCafe() > RESERV_MAX) {

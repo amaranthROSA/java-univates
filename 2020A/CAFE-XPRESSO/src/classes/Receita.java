@@ -36,7 +36,6 @@ public class Receita {
 			setDosagemMultp(2);
 		else
 			setDosagemMultp(1);
-
 	}
 
 	/*-------- PREPARO DAS RECEITAS --------*/
