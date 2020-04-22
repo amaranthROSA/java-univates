@@ -130,19 +130,19 @@ public class Reservatorio {
 	}
 
 	public void setQtCafe(int qtCafe) {
-		Reservatorio.qtCafe = qtCafe;
+		Reservatorio.qtCafe += qtCafe;
 	}
 
 	public void setQtAcucar(int qtAcucar) {
-		Reservatorio.qtAcucar = qtAcucar;
+		Reservatorio.qtAcucar += qtAcucar;
 	}
 
 	public void setQtLeiteEmPo(int qtLeiteEmPo) {
-		Reservatorio.qtLeiteEmPo = qtLeiteEmPo;
+		Reservatorio.qtLeiteEmPo += qtLeiteEmPo;
 	}
 
 	public void setQtAchocolatado(int qtAchocolatado) {
-		Reservatorio.qtAchocolatado = qtAchocolatado;
+		Reservatorio.qtAchocolatado += qtAchocolatado;
 	}
 
 	/* FUNCOES DE BLOQUEIO (caso não haja ingredientes) */
