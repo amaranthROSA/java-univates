@@ -1,0 +1,11 @@
+MaquinaDeLavar
+	tempoMax: 80;
+	
+
+Reservatorio:
+	unidadeMedida: kg, ml, gr
+	capacidadeMax: int
+	nivelAtual: int
+
+	Exemplo de instâncias: resabaoEmPo, SabaoLiquido, TanqueDeLavagem)
+
