@@ -5,6 +5,9 @@ package view;
 
 import javax.swing.JOptionPane;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.ParseException;
+
+import dao.ContasDAO;
 import model.Conta;
 import model.Data;
 import model.Movimento;
@@ -14,18 +17,17 @@ import model.Movimento;
  *
  */
 
-/* Classe designada a fazer operações nas contas */
 public class OperaConta {
 
-	Conta conta;
+	private Conta conta;
 
-	/* Armazena código do cliente para o sistema */
+	/* ----- VARIÁVEIS TRANSITÓRIAS ----- */
 	String codigoCliente;
 	String menuOp;
 	String op;
 
 	public OperaConta(Conta conta) {
-		this.conta = conta;
+		setConta(conta);
 	}
 
 	public void exibir() {
@@ -50,9 +52,16 @@ public class OperaConta {
 			valor = JOptionPane.showInputDialog("Informe o valor a ser transferido: ");
 			String codCliDest = JOptionPane.showInputDialog("Código de cliente da conta de destino: ");
 
-			Conta contaDest = encontrarConta(codCliDest);
+			Conta contaDest = null;
+			ContasDAO dao = new ContasDAO();
+			try {
+				conta = dao.encontrarConta(Long.parseLong(codCliDest));
+				if (contaDest != null)
+					transferir(contaDest, Double.parseDouble(valor));
+			} catch (ParseException pse) {
+				pse.printStackTrace();
+			}
 
-			transferir(contaDest, Double.parseDouble(valor));
 			break;
 		case "5":
 			String limite = JOptionPane.showInputDialog("Informe o limite da conta (em R$)");
@@ -79,19 +88,6 @@ public class OperaConta {
 			JOptionPane.showMessageDialog(null, "Opção não encontrada.");
 			break;
 		}
-	}
-
-	/* Busca conta pelo código e setta ela na variável */
-	public Conta encontrarConta(String codigoCliente) {
-
-		for (Conta conta : BancoTela.contas) {
-
-			if (conta.getCliente().getCodigoCliente().equals(codigoCliente)) {
-
-				return conta;
-			}
-		}
-		return null;
 	}
 
 	public void depositar(Conta conta, double valor) {
@@ -163,8 +159,7 @@ public class OperaConta {
 	public String getExtratoConta() {
 		StringBuilder stb = new StringBuilder();
 		stb.append("----------------------EXTRATO BANCÁRIO----------------------");
-		stb.append("\nProprietário: " + conta.getCliente().getNomeCliente() + " "
-				+ conta.getCliente().getSobrenomeCliente());
+		stb.append("\nProprietário: " + conta.getCliente().getNome() + " " + conta.getCliente().getSobrenome());
 		stb.append("\nSaldo: R$ " + conta.getSaldo());
 		stb.append("\nÚltima movimentação: " + conta.getUtlimaMovimentacao().getDataMovimentacao().obterDiaMesAno()
 				+ "\n");
@@ -178,6 +173,16 @@ public class OperaConta {
 		JOptionPane.showMessageDialog(null, "A conta foi desbloqueada!");
 
 		exibir();
+	}
+
+	/* ----- GETTERS AND SETTERS ----- */
+
+	public void setConta(Conta conta) {
+		this.conta = conta;
+	}
+
+	public Conta getConta() {
+		return conta;
 	}
 
 }

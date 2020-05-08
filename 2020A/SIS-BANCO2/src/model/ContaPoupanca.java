@@ -6,19 +6,23 @@ package model;
 public class ContaPoupanca extends Conta {
 
 	private Data diaAniversario;
-	private int percentualReajuste;
+	private Integer percentualReajuste;
 
-	public ContaPoupanca(Cliente cliente, Long codigo, Double limite) {
-		super(cliente, codigo, limite);
+	public ContaPoupanca(Cliente cliente) {
+		super(cliente);
 	}
 
-	/* Faz reajuste de juros */
+	public ContaPoupanca(Cliente cliente, double limite) {
+		super(cliente, limite);
+	}
+
+	/* ----- REAJUSTE DE JUROS ----- */
 	public void reajustarSaldo(Conta conta) {
 		double reajuste = super.getSaldo() * (this.percentualReajuste / 100);
 		super.depositar(conta, reajuste);
 	}
 
-	/* Verifica aniversário da conta para ajustar juros */
+	/* ----- GETTERS AND SETTERS ----- */
 	public Data getDiaAniversario() {
 		return diaAniversario;
 	}
@@ -27,11 +31,11 @@ public class ContaPoupanca extends Conta {
 		this.diaAniversario = diaAniversario;
 	}
 
-	public int getPercentualReajuste() {
+	public Integer getPercentualReajuste() {
 		return percentualReajuste;
 	}
 
-	public void setPercentualReajuste(int percentualReajuste) {
+	public void setPercentualReajuste(Integer percentualReajuste) {
 		this.percentualReajuste = percentualReajuste;
 	}
 

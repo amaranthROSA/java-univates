@@ -1,6 +1,6 @@
 package test;
 
-import view.BancoTela;
+import view.BancoMain;
 
 public class BancoTeste {
 	public static void main(String[] args) {
@@ -11,13 +11,13 @@ public class BancoTeste {
 	}
 
 	public static void executar() {
-		BancoTela tela = new BancoTela();
+		BancoMain tela = new BancoMain();
 
 		tela.exibir();
 	}
 
 	public static void teste1() {
-		BancoTela tela = new BancoTela();
+		BancoMain tela = new BancoMain();
 
 		tela.exibir();
 	}
