@@ -1,47 +1,55 @@
 package view;
 
-import enums.MenuPrincipalEnum;
+import enums.MenuPrincipalType;
 
 /**
  * @author amaranth.rosa
  */
 public class Biblioteca {
 
-	public MenuPrincipalEnum telaPrincipal() {
+	private static MenuPrincipalType menu;
 
-		MenuPrincipalEnum menuP = Menus.menuPrincipal();
+	public MenuPrincipalType telaPrincipal() {
 
-		if (menuP.equals(MenuPrincipalEnum.RETIRAR_LIVRO))
+		setMenu(Menus.menuPrincipal());
+
+		if (getMenu().equals(MenuPrincipalType.RETIRAR_LIVRO))
 			Menus.retirarLivro();
 
-		else if (menuP.equals(MenuPrincipalEnum.DEVOLVER_LIVRO))
+		else if (getMenu().equals(MenuPrincipalType.DEVOLVER_LIVRO))
 			Menus.devolverLivro();
 
-		else if (menuP.equals(MenuPrincipalEnum.CADASTRAR_LEITOR))
+		else if (getMenu().equals(MenuPrincipalType.CADASTRAR_LEITOR))
 			Menus.cadastrarLeitor();
 
-		else if (menuP.equals(MenuPrincipalEnum.CADASTRAR_LIVRO))
+		else if (getMenu().equals(MenuPrincipalType.CADASTRAR_LIVRO))
 			Menus.cadastrarLivro();
 
-		return menuP;
+		return getMenu();
 
 	}
 
 	public static void main(String[] args) {
 
-		MenuPrincipalEnum menuP = MenuPrincipalEnum.OPCAO_INVALIDA;
-
 		Biblioteca biblioteca = new Biblioteca();
 
-		menuP = biblioteca.telaPrincipal();
+		biblioteca.telaPrincipal();
 
-		while (menuP.equals(MenuPrincipalEnum.OPCAO_INVALIDA)) {
+		while (getMenu().equals(MenuPrincipalType.OPCAO_INVALIDA)) {
 
 			Menus.opcaoInvalida();
-			menuP = biblioteca.telaPrincipal();
+			setMenu(biblioteca.telaPrincipal());
 
 		}
 
+	}
+
+	public static MenuPrincipalType getMenu() {
+		return menu;
+	}
+
+	public static void setMenu(MenuPrincipalType menu) {
+		Biblioteca.menu = menu;
 	}
 
 }

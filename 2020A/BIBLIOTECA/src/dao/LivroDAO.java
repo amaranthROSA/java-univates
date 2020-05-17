@@ -3,6 +3,8 @@ package dao;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Emprestimo;
+import model.Leitor;
 import model.Livro;
 
 /**
@@ -10,14 +12,55 @@ import model.Livro;
  */
 public class LivroDAO {
 
+	private static LivroDAO INSTANCE;
+
 	private static List<Livro> livros = new ArrayList<Livro>();
 
-	public static List<Livro> listLivros() {
+	public LivroDAO() {
+	}
+
+	public List<Livro> listLivros() {
 		return livros;
 	}
 
-	public static void createLivro(Livro livro) {
+	public void createLivro(Livro livro) {
 		livros.add(livro);
+	}
+
+	public boolean retirarLivro(Leitor leitor, Livro livro) {
+		List<Livro> livros = listLivros();
+
+		Livro livrTemp = findLivroByCodigo(livro.getCodigo());
+
+		if (livrTemp != null) {
+			for (Livro lvr : livros) {
+				if (lvr.getCodigo().equals(livro.getCodigo())) {
+					LivroDAO.livros.remove(lvr);
+
+					EmprestimoDAO daoEmprestimo = EmprestimoDAO.getIntance();
+					daoEmprestimo.createEmprestimo(new Emprestimo(leitor, livro));
+
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public Livro findLivroByCodigo(String codigo) {
+		for (Livro livro : livros) {
+			if (livro.getCodigo().equals(codigo))
+				return livro;
+		}
+
+		return null;
+	}
+
+	public static LivroDAO getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new LivroDAO();
+
+		return INSTANCE;
 	}
 
 }

@@ -2,48 +2,94 @@ package view;
 
 import javax.swing.JOptionPane;
 
-import enums.MenuPrincipalEnum;
+import dao.EmprestimoDAO;
+import dao.LeitorDAO;
+import dao.LivroDAO;
+import enums.MenuPrincipalType;
+import model.Emprestimo;
+import model.Leitor;
+import model.Livro;
 
 /**
  * @author amaranth.rosa
  */
 public class Menus {
 
-	public static MenuPrincipalEnum menuPrincipal() {
+	public static MenuPrincipalType menuPrincipal() {
 		String op = JOptionPane.showInputDialog("Escolha uma opção:\n\n" + "[1] Retirar livro\n"
 				+ "[2] Devolver livro\n" + "[3] Cadastrar leitor\n" + "[4] Cadastrar livro" + "\n\n");
 
-		if (op.equals("1"))
-			return MenuPrincipalEnum.RETIRAR_LIVRO;
-
-		else if (op.equals("2"))
-			return MenuPrincipalEnum.DEVOLVER_LIVRO;
-
-		else if (op.equals("3"))
-			return MenuPrincipalEnum.CADASTRAR_LEITOR;
-
-		else if (op.equals("4"))
-			return MenuPrincipalEnum.CADASTRAR_LIVRO;
-
-		else {
-			return MenuPrincipalEnum.OPCAO_INVALIDA;
+		switch (op) {
+		case "1":
+			op = "";
+			return MenuPrincipalType.RETIRAR_LIVRO;
+		case "2":
+			op = "";
+			return MenuPrincipalType.DEVOLVER_LIVRO;
+		case "3":
+			op = "";
+			return MenuPrincipalType.CADASTRAR_LEITOR;
+		case "4":
+			op = "";
+			return MenuPrincipalType.CADASTRAR_LIVRO;
+		default:
+			op = "";
+			return MenuPrincipalType.OPCAO_INVALIDA;
 		}
 	}
 
 	public static void retirarLivro() {
-		System.out.println("Retirando livro...");
+		EmprestimoDAO daoEmprestimo = EmprestimoDAO.getIntance();
+		LivroDAO daoBiblioteca = LivroDAO.getInstance();
+		LeitorDAO daoLeitor = LeitorDAO.getInstance();
+
+		String codLivro = JOptionPane.showInputDialog("Informe código do livro: ");
+		String codLeitor = JOptionPane.showInputDialog("Informe o código do leitor: ");
+
+		Livro resultLivro = daoBiblioteca.findLivroByCodigo(codLivro);
+		Leitor resultLeitor = daoLeitor.findLeitorByCodigo(codLeitor);
+
+		if (resultLivro != null) {
+			daoBiblioteca.retirarLivro(resultLeitor, resultLivro);
+			daoEmprestimo.createEmprestimo(new Emprestimo());
+
+			JOptionPane.showMessageDialog(null, "Livro retirado com sucesso.");
+		}
+
 	}
 
 	public static void devolverLivro() {
-		System.out.println("Devolvendo livro...");
+		LivroDAO daoBiblitoeca = new LivroDAO();
+		EmprestimoDAO daoEmprestimo = new EmprestimoDAO();
 	}
 
 	public static void cadastrarLeitor() {
-		System.out.println("Cadastrando leitor...");
+		LeitorDAO dao = LeitorDAO.getInstance();
+
+		String codigo = JOptionPane.showInputDialog("Informe o código: ");
+		String nome = JOptionPane.showInputDialog("Informe o nome: ");
+		String sobrenome = JOptionPane.showInputDialog("Informe o sobrenome; ");
+
+		dao.createLeitor(new Leitor(codigo, nome, sobrenome));
+
+		JOptionPane.showMessageDialog(null, "Leitor cadastrado com sucesso.");
+
+		menuPrincipal();
+
 	}
 
 	public static void cadastrarLivro() {
-		System.out.println("Cadastrando livro...");
+		LivroDAO dao = LivroDAO.getInstance();
+
+		String codigo = JOptionPane.showInputDialog("Informe o código do livro: ");
+		String nome = JOptionPane.showInputDialog("Informe o nome do livro: ");
+		String autor = JOptionPane.showInputDialog("Informe o nome do autor: ");
+
+		dao.createLivro(new Livro(codigo, nome, autor));
+
+		JOptionPane.showMessageDialog(null, "Livro cadastrado com sucesso.");
+
+		menuPrincipal();
 	}
 
 	public static void opcaoInvalida() {
