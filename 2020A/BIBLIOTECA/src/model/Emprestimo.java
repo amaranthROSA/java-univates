@@ -5,6 +5,7 @@ package model;
  */
 public class Emprestimo {
 
+	private static Integer sequencia = 0;
 	private Leitor leitor;
 	private Livro livro;
 	private Data dataRetirada;
@@ -16,6 +17,7 @@ public class Emprestimo {
 	public Emprestimo(Leitor leitor, Livro livro) {
 		setLeitor(leitor);
 		setLivro(livro);
+		incrementSequencia();
 	}
 
 	public Leitor getLeitor() {
@@ -48,6 +50,19 @@ public class Emprestimo {
 
 	public void setDataDevolucao(Data dataDevolucao) {
 		this.dataDevolucao = dataDevolucao;
+	}
+
+	public Integer getSequencia() {
+		return sequencia;
+	}
+
+	public void incrementSequencia() {
+		sequencia++;
+	}
+
+	@Override
+	public String toString() {
+		return "Cód: " + sequencia + ", leitor: " + leitor + ", livro: " + livro;
 	}
 
 }

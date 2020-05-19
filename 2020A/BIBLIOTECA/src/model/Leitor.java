@@ -42,4 +42,9 @@ public class Leitor {
 		this.sobrenome = sobrenome;
 	}
 
+	@Override
+	public String toString() {
+		return "Cód: " + codigo + ", Nome: " + nome + ", Sobrenome: " + sobrenome;
+	}
+
 }

@@ -17,7 +17,7 @@ public class EmprestimoDAO {
 	public EmprestimoDAO() {
 	}
 
-	public static List<Emprestimo> listEmprestimos() {
+	public List<Emprestimo> listEmprestimos() {
 		return emprestimos;
 	}
 
@@ -26,6 +26,18 @@ public class EmprestimoDAO {
 	 */
 	public void createEmprestimo(Emprestimo emprestimo) {
 		emprestimos.add(emprestimo);
+	}
+
+	/*
+	 * Encontra o empréstimo pelo seu código (sequência)
+	 */
+	public Emprestimo findEmprestimoByCodigo(String codigoEmprestimo) {
+		for (Emprestimo emprestimo : emprestimos) {
+			if (emprestimo.getSequencia().equals(Integer.valueOf(codigoEmprestimo)))
+				return emprestimo;
+		}
+
+		return null;
 	}
 
 	/*
