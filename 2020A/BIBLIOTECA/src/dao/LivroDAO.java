@@ -27,6 +27,9 @@ public class LivroDAO {
 		livros.add(livro);
 	}
 
+	/*
+	 * Realiza a retirada do livro
+	 */
 	public boolean retirarLivro(Leitor leitor, Livro livro) {
 		List<Livro> livros = listLivros();
 
@@ -47,6 +50,9 @@ public class LivroDAO {
 		return false;
 	}
 
+	/*
+	 * Localiza um livro informando o código dele
+	 */
 	public Livro findLivroByCodigo(String codigo) {
 		for (Livro livro : livros) {
 			if (livro.getCodigo().equals(codigo))
