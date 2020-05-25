@@ -18,9 +18,6 @@ public class EstacionamentoDAO {
 		return estacionamentos;
 	}
 
-	/*
-	 * Adiciona uma nova praça de estacionamento
-	 */
 	public void addEstacionamento(Estacionamento estacionamento) {
 		estacionamentos.add(estacionamento);
 	}
@@ -29,9 +26,9 @@ public class EstacionamentoDAO {
 	 * Encontra um estacionamento informando o número
 	 */
 	public Estacionamento findEstacionamento(int numeroEstacionamento) {
-		for (Estacionamento estc : getEstacionamentos()) {
-			if (estc.getNumeroEstacionamento() == numeroEstacionamento)
-				return estc;
+		for (Estacionamento estacionamento : getEstacionamentos()) {
+			if (estacionamento.getCodigo() == numeroEstacionamento)
+				return estacionamento;
 		}
 
 		return null;
@@ -40,7 +37,7 @@ public class EstacionamentoDAO {
 	/*
 	 * Retorna total de veículos estacionados em todas as praças
 	 */
-	public int getTotalVeiculoEstacionados() {
+	public int getVeiculoEstacionados() {
 		int total = 0;
 
 		for (Estacionamento estacionamento : getEstacionamentos()) {
@@ -61,6 +58,10 @@ public class EstacionamentoDAO {
 		}
 
 		return total;
+	}
+
+	public int getquantidadeVeiculosTotalDia() {
+		return Estacionamento.quantidadeVeiculosTotalDia;
 	}
 
 	/*

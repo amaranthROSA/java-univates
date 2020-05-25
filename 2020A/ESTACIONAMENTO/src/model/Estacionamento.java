@@ -12,93 +12,155 @@ import dao.EstacionamentoDAO;
  */
 public class Estacionamento {
 
-	private static int TARIFA_BASE = 3;
+	private static int sequencia = 0;
+	public static int quantidadeVeiculosTotalDia;
+
+	private int codigo;
+	private int quantidadeVeiculosEstacionados;
+	private int quantidadeVagasDisponiveis;
+	private int valorArrecadado;
 
 	private static List<Veiculo> veiculos = new ArrayList<Veiculo>();
 
-	private int numeroEstacionamento;
-	private int quantidadeVeiculosTotalDia;
-	private int quantidadeVeiculosEstacionados;
-	private int valorArrecadado;
-
 	private static EstacionamentoDAO dao = EstacionamentoDAO.getInstance();
+
+	public Estacionamento() {
+		incrementarSequencia();
+		setCodigo(sequencia);
+		setQuantidadeVagasDisponiveis(15);
+	}
+
+	public List<Veiculo> getVeiculos() {
+		return veiculos;
+	}
 
 	/*
 	 * Método que processa entrada de veículo no estacionamento
 	 */
-	public void entrar(Veiculo veiculo, int numeroEstacionamento) {
-
-		while (dao.findEstacionamento(numeroEstacionamento) == null) {
-			JOptionPane.showMessageDialog(null, "Estacionamento não encontrado!");
-		}
-
-		Estacionamento estacionamento = dao.findEstacionamento(numeroEstacionamento);
+	public boolean entrarEstacionamento(Veiculo veiculo, Estacionamento estacionamento) {
 		estacionamento.addVeiculo(veiculo);
 
-		quantidadeVeiculosTotalDia++;
-		quantidadeVeiculosEstacionados++;
+		if (getQuantidadeVagasDisponiveis() <= 0) {
+
+			return false;
+		} else {
+			estacionamento.incrementarQuantidadeVeiculosEstacionados();
+			estacionamento.incrementarQuantidadeVeiculosTotalDia();
+			estacionamento.decrementarQuantidadeVagasDisponiveis();
+
+			return true;
+		}
 	}
 
 	/*
 	 * Método que processa saída de veícuo do estacionamento
 	 */
-	public void sair(Veiculo veiculo, Estacionamento estacionamento, int horaSaida) {
-		veiculo.getTicket().setHoraSaida(horaSaida);
+	public boolean sairEstacionamento(Veiculo veiculo, Estacionamento estacionamento) {
 
-		JOptionPane.showConfirmDialog(null, "Sua tarifa é de R$ " + getTarifaTotal(veiculo));
+		while (JOptionPane.showConfirmDialog(null,
+				"Sua tarifa é de R$ " + veiculo.getTicket().getTarifaTotal() + "\n Deseja pagar?\n\n") != 0) {
 
-		while (veiculo.isTarifaPaga() != true) {
 			JOptionPane.showMessageDialog(null, "Saída não autorizada, pague a tarifa!");
+
 		}
 
-		veiculo.setIsTarifaPaga(true);
+		veiculo.getTicket().setTarifaPaga(true);
 
-		quantidadeVeiculosEstacionados--;
+		if (veiculo.getTicket().isTarifaPaga() == true) {
+			estacionamento.addValorTarifa(veiculo.getTicket().getTarifaTotal());
+			estacionamento.removeVeiculo(veiculo);
+
+			estacionamento.decrementarQuantidadeVeiculosEstacionados();
+			estacionamento.incrementarQuantidadeVagasDisponiveis();
+
+			return true;
+
+		}
+
+		return false;
+
 	}
 
 	/*
-	 * Retorna valor valor da tarifa-base multiplicado pelo número de horas
+	 * Informa quantas vagas disponíveis há
 	 */
-	public int getTarifaTotal(Veiculo veiculo) {
-		return TARIFA_BASE * (veiculo.getTicket().getHoraEntrada() - veiculo.getTicket().getHoraSaida());
+	public int getVagasDisponiveis() {
+		return (getQuantidadeVagasDisponiveis() - getQuantidadeVeiculosEstacionados());
 	}
 
-	/* MÉTODOS AUXILIARES */
+	public void setQuantidadeVagasDisponiveis(int quantidadeVagasDisponiveis) {
+		this.quantidadeVagasDisponiveis = quantidadeVagasDisponiveis;
+	}
 
 	/*
-	 * Introduz um carro no estacionamento
+	 * Adiciona veículo ao estacionamento
 	 */
 	public void addVeiculo(Veiculo veiculo) {
 		veiculos.add(veiculo);
 	}
 
 	/*
-	 * Introduz o valor arrecadado de uma tarifa paga
+	 * Retira veículo do estacionamento
 	 */
+	public void removeVeiculo(Veiculo veiculo) {
+		veiculos.remove(veiculo);
+	}
+
 	public void addValorTarifa(int valorTarifa) {
 		this.valorArrecadado += valorTarifa;
 	}
 
-	/* GETTERS AND SETTERS */
+	public int getCodigo() {
+		return codigo;
+	}
 
-	public int getQuantidadeVeiculosTotalDia() {
-		return quantidadeVeiculosTotalDia;
+	public void setCodigo(int codigo) {
+		this.codigo = codigo;
+	}
+
+	public static void incrementarSequencia() {
+		sequencia++;
+	}
+
+	public void incrementarQuantidadeVeiculosEstacionados() {
+		quantidadeVeiculosEstacionados++;
+	}
+
+	public void decrementarQuantidadeVeiculosEstacionados() {
+		quantidadeVeiculosEstacionados--;
 	}
 
 	public int getQuantidadeVeiculosEstacionados() {
 		return quantidadeVeiculosEstacionados;
 	}
 
+	public void incrementarQuantidadeVagasDisponiveis() {
+		quantidadeVagasDisponiveis++;
+	}
+
+	public void decrementarQuantidadeVagasDisponiveis() {
+		quantidadeVagasDisponiveis--;
+	}
+
+	public int getQuantidadeVagasDisponiveis() {
+		return quantidadeVagasDisponiveis;
+	}
+
+	public void incrementarQuantidadeVeiculosTotalDia() {
+		quantidadeVeiculosTotalDia++;
+	}
+
+	public int getQuantidadeVeiculosTotalDia() {
+		return quantidadeVeiculosTotalDia;
+	}
+
 	public int getValorArrecadado() {
 		return valorArrecadado;
 	}
 
-	public int getNumeroEstacionamento() {
-		return numeroEstacionamento;
-	}
-
-	public void setNumeroEstacionamento(int numeroEstacionamento) {
-		this.numeroEstacionamento = numeroEstacionamento;
+	@Override
+	public String toString() {
+		return "Código: " + codigo + ", vagas disponíveis: " + quantidadeVagasDisponiveis;
 	}
 
 }
