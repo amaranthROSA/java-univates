@@ -36,7 +36,7 @@ public class Menu {
 		case "7":
 			listarEmprestimos();
 		case "x":
-			System.exit(0);
+			salvarEstadoDoSistema();
 		default:
 			opcaoInvalida();
 		}
@@ -46,8 +46,8 @@ public class Menu {
 		LivroDAO daoLivro = LivroDAO.getInstance();
 		LeitorDAO daoLeitor = LeitorDAO.getInstance();
 
-		String codLivro = JOptionPane.showInputDialog(daoLivro.listLivros() + "\n\nInforme código do livro:\n");
-		String codLeitor = JOptionPane.showInputDialog(daoLeitor.listLeitores() + "\n\nInforme o código do leitor:\n");
+		String codLivro = JOptionPane.showInputDialog(daoLivro.getLivros() + "\n\nInforme código do livro:\n");
+		String codLeitor = JOptionPane.showInputDialog(daoLeitor.getLeitores() + "\n\nInforme o código do leitor:\n");
 
 		Livro resultLivro = daoLivro.findLivroByCodigo(codLivro);
 		Leitor resultLeitor = daoLeitor.findLeitorByCodigo(codLeitor);
@@ -67,10 +67,10 @@ public class Menu {
 		EmprestimoDAO daoEmprestimo = new EmprestimoDAO();
 
 		String codigoEmprestimo = JOptionPane
-				.showInputDialog(daoEmprestimo.listEmprestimos() + "\n\nInforme o número do empréstimo:\n");
+				.showInputDialog(daoEmprestimo.getEmprestimos() + "\n\nInforme o número do empréstimo:\n");
 
 		Emprestimo emprestimo = daoEmprestimo.findEmprestimoByCodigo(codigoEmprestimo);
-		daoEmprestimo.listEmprestimos().remove(emprestimo);
+		daoEmprestimo.getEmprestimos().remove(emprestimo);
 
 		JOptionPane.showMessageDialog(null, "Livro devolvido com sucesso.");
 
@@ -85,7 +85,7 @@ public class Menu {
 		String nome = JOptionPane.showInputDialog("Informe o nome: ");
 		String sobrenome = JOptionPane.showInputDialog("Informe o sobrenome; ");
 
-		dao.createLeitor(new Leitor(codigo, nome, sobrenome));
+		dao.addLeitor(new Leitor(codigo, nome, sobrenome));
 
 		JOptionPane.showMessageDialog(null, "Leitor cadastrado com sucesso.");
 
@@ -96,7 +96,7 @@ public class Menu {
 	public static void listarLeitores() {
 		LeitorDAO dao = LeitorDAO.getInstance();
 
-		JOptionPane.showMessageDialog(null, dao.listLeitores());
+		JOptionPane.showMessageDialog(null, dao.getLeitores());
 
 		menuPrincipal();
 	}
@@ -108,7 +108,7 @@ public class Menu {
 		String nome = JOptionPane.showInputDialog("Informe o nome do livro: ");
 		String autor = JOptionPane.showInputDialog("Informe o nome do autor: ");
 
-		dao.createLivro(new Livro(codigo, nome, autor));
+		dao.addLivro(new Livro(codigo, nome, autor));
 
 		JOptionPane.showMessageDialog(null, "Livro cadastrado com sucesso.");
 
@@ -118,7 +118,7 @@ public class Menu {
 	public static void listarLivros() {
 		LivroDAO dao = LivroDAO.getInstance();
 
-		JOptionPane.showMessageDialog(null, dao.listLivros());
+		JOptionPane.showMessageDialog(null, dao.getLivros());
 
 		menuPrincipal();
 	}
@@ -126,7 +126,7 @@ public class Menu {
 	public static void listarEmprestimos() {
 		EmprestimoDAO dao = EmprestimoDAO.getIntance();
 
-		JOptionPane.showMessageDialog(null, dao.listEmprestimos());
+		JOptionPane.showMessageDialog(null, dao.getEmprestimos());
 
 		menuPrincipal();
 	}
@@ -135,6 +135,18 @@ public class Menu {
 		JOptionPane.showMessageDialog(null, "Escolha uma opção válida!");
 
 		menuPrincipal();
+	}
+
+	public static void salvarEstadoDoSistema() {
+		LivroDAO livroDao = LivroDAO.getInstance();
+		LeitorDAO leitorDao = LeitorDAO.getInstance();
+		EmprestimoDAO emprestimoDao = EmprestimoDAO.getIntance();
+
+		livroDao.save();
+		leitorDao.save();
+		emprestimoDao.save();
+
+		System.exit(0);
 	}
 
 }

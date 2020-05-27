@@ -1,5 +1,7 @@
 package dao;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +19,47 @@ public class EmprestimoDAO {
 	public EmprestimoDAO() {
 	}
 
-	public List<Emprestimo> listEmprestimos() {
+	public List<Emprestimo> getEmprestimos() {
 		return emprestimos;
+	}
+
+	public void save() {
+		try {
+			FileWriter file = new FileWriter("C:\\temp\\emprestimoDAO.csv");
+
+			StringBuilder stb = new StringBuilder();
+			for (Emprestimo emprestimo : getEmprestimos()) {
+				// emprestimo
+				stb.append(emprestimo.getDataRetirada() + ";");
+				stb.append(emprestimo.getDataDevolucao() + ";");
+				// livro
+				stb.append(emprestimo.getLivro().getCodigo() + ";");
+				stb.append(emprestimo.getLivro().getNome() + ";");
+				stb.append(emprestimo.getLivro().getAutor() + ";");
+				// leitor
+				stb.append(emprestimo.getLeitor().getCodigo() + ";");
+				stb.append(emprestimo.getLeitor().getNome() + ";");
+				stb.append(emprestimo.getLeitor().getSobrenome() + ";");
+				stb.append("\r\n");
+			}
+
+			file.append(stb.toString());
+			file.close();
+
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
+
+	}
+
+	public void load() {
+
 	}
 
 	/*
 	 * Cria um novo empréstimo
 	 */
-	public void createEmprestimo(Emprestimo emprestimo) {
+	public void addEmprestimo(Emprestimo emprestimo) {
 		emprestimos.add(emprestimo);
 	}
 
