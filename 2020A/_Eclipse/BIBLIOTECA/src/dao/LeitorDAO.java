@@ -2,8 +2,12 @@ package dao;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import model.Leitor;
 
@@ -48,6 +52,33 @@ public class LeitorDAO {
 	}
 
 	public void load() {
+		LeitorDAO leitorDao = LeitorDAO.getInstance();
+
+		StringBuilder content = new StringBuilder();
+		try {
+			Stream<String> file = Files.lines(Paths.get("C:\\temp\\leitorDao.csv"), StandardCharsets.UTF_8);
+
+			file.forEach(line -> {
+				content.append(line);
+			});
+
+			String decode = content.toString();
+
+			String[] read = decode.split(";");
+			for (int i = 0; i < read.length; i++) {
+				Leitor leitor = new Leitor();
+				leitor.setCodigo(read[0]);
+				leitor.setNome(read[1]);
+				leitor.setSobrenome(read[2]);
+
+				leitorDao.addLeitor(leitor);
+			}
+
+			file.close();
+
+		} catch (IOException ioe) {
+			ioe.printStackTrace();
+		}
 
 	}
 

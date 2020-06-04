@@ -1,10 +1,13 @@
 package dao;
 
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import model.Emprestimo;
 import model.Leitor;
@@ -59,24 +62,32 @@ public class LivroDAO {
 	public void load() {
 		LivroDAO livroDao = LivroDAO.getInstance();
 
+		StringBuilder content = new StringBuilder();
 		try {
-			FileReader file = new FileReader("C:\\temp\\livroDAO.csv");
-			String st = file.toString();
+			Stream<String> file = Files.lines(Paths.get("C:\\temp\\livroDAO.csv"), StandardCharsets.UTF_8);
 
-			String[] read = st.split(";");
+			file.forEach(line -> {
+				content.append(line);
+			});
+
+			String decode = content.toString();
+
+			String[] read = decode.split(";");
 			for (int i = 0; i < read.length; i++) {
 				Livro livro = new Livro();
-				livro.setCodigo(read[i]);
-				livro.setNome(read[i]);
-				livro.setAutor(read[i]);
+				livro.setCodigo(read[0]);
+				livro.setNome(read[1]);
+				livro.setAutor(read[2]);
 
 				livroDao.addLivro(livro);
 			}
 
 			file.close();
+
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		}
+
 	}
 
 	/*
