@@ -3,18 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exercicio3;
+package main;
+
+import view.Tela;
 
 /**
  *
  * @author amaranth.rosa
  */
-public class Main {
+public class ControleDespesa {
 
     public static void main(String[] args) {
-        
-             
-//        Camarote camVip = new CamaroteSuperior();
+
+        Tela tela = new Tela();
+        tela.setVisible(true);
+        tela.setLocationRelativeTo(null);
 
     }
 

@@ -3,19 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package exercicio3;
+package exercicio4;
 
 /**
  *
  * @author amaranth.rosa
  */
-public class Main {
-
+public class TryCatch {
     public static void main(String[] args) {
+    
+    int x = 0;
+    int y = 10;
+    
+    try  {
         
-             
-//        Camarote camVip = new CamaroteSuperior();
-
+        System.out.println(y/x);
+        
+    } catch(ArithmeticException art) {
+       art.printStackTrace();
+    
+    } catch (Exception e) {
+        e.printStackTrace();
     }
-
+        
+    }
 }

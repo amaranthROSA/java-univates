@@ -11,9 +11,23 @@ package model;
  */
 public class Horista extends Empregado {
 
+    /**
+     * Atributo "valor hora"
+     */
     private double valorHora;
+    
+    /**
+     * Atributo "horas trabalhadas"
+     */
     private double horasTrabalhadas;
 
+    /**
+     * Construtor
+     * @param nome
+     * @param numeroPis
+     * @param valorHora
+     * @param horasTrabalhadas 
+     */
     public Horista(String nome, String numeroPis,
             double valorHora, double horasTrabalhadas) {
         super(nome, numeroPis);
@@ -22,6 +36,10 @@ public class Horista extends Empregado {
         setHorasTrabalhadas(horasTrabalhadas);
     }
     
+    /**
+     * Retorna ganhos do Horista
+     * @return (Double)
+     */
       @Override
     public double ganhos() {
         double salario;
@@ -34,22 +52,42 @@ public class Horista extends Empregado {
         return salario;
     }
 
+    /**
+     * Retorna "valor hora"
+     * @return (Double)
+     */
     public double getValorHora() {
         return valorHora;
     }
 
+    /**
+     * Define "valor hora"
+     * @param valorHora 
+     */
     public void setValorHora(double valorHora) {
         this.valorHora = valorHora;
     }
 
+    /**
+     * Retorna "horas trabalhadas"
+     * @return (Double)
+     */
     public double getHorasTrabalhadas() {
         return horasTrabalhadas;
     }
 
+    /**
+     * Define "horas trabalhadas"
+     * @param horasTrabalhadas 
+     */
     public void setHorasTrabalhadas(double horasTrabalhadas) {
         this.horasTrabalhadas = horasTrabalhadas;
     }
 
+    /**
+     * Descreve objeto Horista
+     * @return (Stirng)
+     */
     @Override
     public String toString() {
         return "Funcionário Horista: " + super.toString()

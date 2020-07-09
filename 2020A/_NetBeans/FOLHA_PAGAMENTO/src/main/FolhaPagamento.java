@@ -14,22 +14,24 @@ import model.Empregado;
 import model.Horista;
 import model.Mensalista;
 
-/**
+/**Projeto para calcular folha de pagamento
+*Este programa mantém os dados dos funcionários
+* e calcula a folha de pagamento
  *
  * @author amaranth.rosa
+ * @version 1.0
+ * @since june/2020
  */
 public class FolhaPagamento {
 
+    /** Método main - Inicializa o programa
+     * Salva os dados em um arquivo TXT
+     * @param args 
+     */
     public static void main(String[] args) {
 
-        Mensalista empregado1 = new Mensalista("Mensalista", "001", 1000.0);
-        EmpregadoDao.addEmpregado(empregado1);
-        Horista empregado2 = new Horista("Horista", "002", 30.0, 200.0);
-        EmpregadoDao.addEmpregado(empregado2);
-        Comissionado empregado3 = new Comissionado("Comissionado", "003", 5.0, 30000.0);
-        EmpregadoDao.addEmpregado(empregado3);
-        ComissionadoComBase empregado4 = new ComissionadoComBase("ComissionadoComBase", "004", 5.0, 30000.0, 1.000);
-        EmpregadoDao.addEmpregado(empregado4);
+        gerarDados();
+//        EmpregadoDao.load();
 
         System.out.println("Processamento da folha: ");
 
@@ -48,5 +50,21 @@ public class FolhaPagamento {
         }
 
         System.out.println("Valor Total da Folha: " + totalFolha);
+
+        EmpregadoDao.save();
+    }
+
+    /**
+     * Gera dados para armazenar no vetor
+     */
+    public static void gerarDados() {
+        Mensalista empregado1 = new Mensalista("Mensalista", "001", 1000.0);
+        EmpregadoDao.addEmpregado(empregado1);
+        Horista empregado2 = new Horista("Horista", "002", 30.0, 200.0);
+        EmpregadoDao.addEmpregado(empregado2);
+        Comissionado empregado3 = new Comissionado("Comissionado", "003", 5.0, 30000.0);
+        EmpregadoDao.addEmpregado(empregado3);
+        ComissionadoComBase empregado4 = new ComissionadoComBase("ComissionadoComBase", "004", 5.0, 30000.0, 1.000);
+        EmpregadoDao.addEmpregado(empregado4);
     }
 }
